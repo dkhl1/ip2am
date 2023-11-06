@@ -1,0 +1,4 @@
+tretspef	mainspef	term
+258		Paediatric Respiratory Medicine
+340		Respiratory Medicine
+420		Paediatric Service

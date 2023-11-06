@@ -1,0 +1,3 @@
+CPRD Linked Data Source 	Coding Frame	Code
+HES Accident & Emergency	DIAG3_NN 	251
+HES Accident & Emergency	TREAT2_N 	25

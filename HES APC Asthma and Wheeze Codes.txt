@@ -1,0 +1,8 @@
+CPRD Linked Data Source 	Coding Frame	Description	Code
+HES APC	ICD-10	Asthma	J45
+HES APC	ICD-10	Predominantly allergic asthma	J45.0
+HES APC	ICD-10	Nonallergic asthma	J45.1
+HES APC	ICD-10	Mixed asthma	J45.8
+HES APC	ICD-10	"Asthma, unspecified"	J45.9
+HES APC	ICD-10	Status asthmaticus	J46
+HES APC	ICD-10	Wheezing	R06.2

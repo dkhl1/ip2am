@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wheeze Risk Calculator: Recurrence</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>Wheeze Risk Calculator: Any recurrence of wheeze</h1>
+    <form id="calculatorForm">
+        <div class="form-group">
+            <label for="age">Age (0-5):</label>
+            <input type="number" id="age" name="age" min="0" max="5" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sex">Sex:</label>
+            <select id="sex" name="sex" required>
+                <option value="">Select...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Healthcare location of wheeze:</label>
+            <select id="location" name="location" required>
+                <option value="">Select...</option>
+                <option value="primary_care">Primary Care</option>
+                <option value="hospitalisation">Hospitalisation</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="bronchiolitis">Bronchiolitis:</label>
+            <select id="bronchiolitis" name="bronchiolitis" required>
+                <option value="">Select...</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="atopy">Atopy:</label>
+            <select id="atopy" name="atopy" required>
+                <option value="">Select...</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="saba">Number of short-acting beta-2 agonist (SABA) prescriptions in the past 12 months:</label>
+            <select id="saba" name="saba" required>
+                <option value="">Select...</option>
+                <option value="0">0</option>
+                <option value="1-2">1-2</option>
+                <option value="3-4">3-4</option>
+                <option value="5+">5+</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ics">Number of inhaled corticosteroid (ICS) prescriptions in the past 12 months:</label>
+            <select id="ics" name="ics" required>
+                <option value="">Select...</option>
+                <option value="0">0</option>
+                <option value="1-2">1-2</option>
+                <option value="3-4">3-4</option>
+                <option value="5+">5+</option>
+            </select>
+        </div>
+
+	<div class="form-group">
+    	    <label for="prev_wheeze">Number of previous wheeze episodes ever prior:</label>
+    	    <select id="prev_wheeze" required>
+        	<option value="">Select...</option>
+        	<option value="0">0</option>
+        	<option value="1-2">1-2</option>
+        	<option value="3-4">3-4</option>
+        	<option value="5+">5+</option>
+    	</select>
+	</div>
+
+	<div class="form-group">
+	    <label for="hospitalisations">Number of hospitalisations ever prior to index episode:</label>
+	    <select id="hospitalisations" required>
+	        <option value="">Select...</option>
+	        <option value="0">0</option>
+	        <option value="1-2">1-2</option>
+	        <option value="3-4">3-4</option>
+	        <option value="5+">5+</option>
+	    </select>
+	</div>
+	
+	<div class="form-group">
+	    <label for="attack12">At least one wheeze attack in past 12 months:</label>
+	    <select id="attack12" required>
+	        <option value="">Select...</option>
+	        <option value="no">No</option>
+	        <option value="yes">Yes</option>
+	    </select>
+	</div>
+
+	<div class="form-group">
+    	    <label for="ethnicity">Ethnicity:</label>
+    	    <select id="ethnicity" required>
+        	<option value="">Select...</option>
+        	<option value="white">White</option>
+        	<option value="south_asian">South Asian</option>
+        	<option value="black">Black</option>
+        	<option value="other">Other</option>
+        	<option value="mixed">Mixed</option>
+	    </select>
+</div>
+        <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+    <h2 id="result"></h2>
+
+<script>
+function calculate() {
+
+    // Updated constant
+    const constant = Math.log(0.4139136);
+
+    const effects = {
+        age: Math.log(0.8861797),
+
+        sex: {
+            female: Math.log(1),
+            male: Math.log(1.093558)
+        },
+
+        location: {
+            primary_care: Math.log(1),
+            hospitalisation: Math.log(1.767273)
+        },
+
+        bronchiolitis: {
+            no: Math.log(1),
+            yes: Math.log(1.469611)
+        },
+
+        atopy: {
+            no: Math.log(1),
+            yes: Math.log(1.390580)
+        },
+
+        attack12: {
+            no: Math.log(1),
+            yes: Math.log(1.756915)
+        },
+
+        prev_wheeze: {
+            "0": Math.log(1),
+            "1-2": Math.log(0.8785251),
+            "3-4": Math.log(1.124735),
+            "5+": Math.log(1.368111)
+        },
+
+        hospitalisations: {
+            "0": Math.log(1),
+            "1-2": Math.log(1.212566),
+            "3-4": Math.log(1.319934),
+            "5+": Math.log(1.684776)
+        },
+
+        saba: {
+            "0": Math.log(1),
+            "1-2": Math.log(1.184809),
+            "3-4": Math.log(1.308060),
+            "5+": Math.log(1.610686)
+        },
+
+        ics: {
+            "0": Math.log(1),
+            "1-2": Math.log(0.9321344),
+            "3-4": Math.log(0.7773393),
+            "5+": Math.log(0.6377279)
+        },
+
+        ethnicity: {
+            white: Math.log(1),
+            south_asian: Math.log(1.152295),
+            black: Math.log(1.049864),
+            other: Math.log(1.09209),
+            mixed: Math.log(1.139096)
+        }
+    };
+
+    // Retrieve inputs
+    const age = parseFloat(document.getElementById('age').value);
+    const sex = document.getElementById('sex').value;
+    const location = document.getElementById('location').value;
+    const bronchiolitis = document.getElementById('bronchiolitis').value;
+    const atopy = document.getElementById('atopy').value;
+    const attack12 = document.getElementById('attack12').value;
+    const hospitalisations = document.getElementById('hospitalisations').value;
+    const saba = document.getElementById('saba').value;
+    const ics = document.getElementById('ics').value;
+    const prev_wheeze = document.getElementById('prev_wheeze').value;
+    const ethnicity = document.getElementById('ethnicity').value;
+
+    // Validate
+    if (
+        isNaN(age) || age < 0 || age > 5 ||
+        !sex || !location || !bronchiolitis || !atopy ||
+        !attack12 || !hospitalisations ||
+        !saba || !ics || !prev_wheeze || !ethnicity
+    ) {
+        document.getElementById('result').innerText =
+            "Please enter valid details.";
+        return;
+    }
+
+    // Linear predictor
+    const XB =
+        constant +
+        effects.age * age +
+        effects.sex[sex] +
+        effects.location[location] +
+        effects.bronchiolitis[bronchiolitis] +
+        effects.atopy[atopy] +
+        effects.attack12[attack12] +
+        effects.hospitalisations[hospitalisations] +
+        effects.saba[saba] +
+        effects.ics[ics] +
+        effects.prev_wheeze[prev_wheeze] +
+        effects.ethnicity[ethnicity];
+
+    // Convert to probability
+    const probability = Math.exp(XB) / (1 + Math.exp(XB));
+    const result = (probability * 100).toFixed(1);
+    const numericResult = parseFloat(result);
+
+    let riskCategory = "";
+
+    if (numericResult < 30) {
+        riskCategory = "Low";
+    } else if (numericResult <= 50) {
+        riskCategory = "Medium";
+    } else {
+        riskCategory = "High";
+    }
+
+    document.getElementById('result').innerText =
+        `${riskCategory} risk of wheeze recurrence (predicted risk of ${result}%)`;
+}
+</script>
+</body>
+</html>
